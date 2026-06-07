@@ -73,7 +73,7 @@ function parseNameLines(text) {
 }
 
 function getItemName(targetItem) {
-  return itemNames[targetItem - 1] || `아이템 ${targetItem}`;
+  return itemNames[targetItem ] || `아이템 ${targetItem}`;
 }
 
 function getMonsterName(index) {
