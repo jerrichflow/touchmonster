@@ -1,22 +1,97 @@
 const DATA_PATH = "data/";
 
-const PROPERTY_NAMES = {
-  0: "전체",
-  1: "풀",
-  2: "불",
-  3: "물",
-  4: "빛",
-  5: "어둠",
+const PROPERTY_NAMES_BY_LANG = {
+  Ko: {
+    0: "전체",
+    1: "풀",
+    2: "불",
+    3: "물",
+    4: "빛",
+    5: "어둠",
+  },
+  En: {
+    0: "All",
+    1: "Grass",
+    2: "Fire",
+    3: "Water",
+    4: "Light",
+    5: "Dark",
+  },
+  Ja: {
+    0: "全体",
+    1: "草",
+    2: "火",
+    3: "水",
+    4: "光",
+    5: "闇",
+  },
+  Zh: {
+    0: "全部",
+    1: "草",
+    2: "火",
+    3: "水",
+    4: "光",
+    5: "暗",
+  },
 };
 
-const RANK_NAMES = {
-  1: "1등급",
-  2: "2등급",
-  3: "3등급",
-  4: "4등급",
-  5: "5등급",
+const RANK_NAMES_BY_LANG = {
+  Ko: {
+    1: "1등급",
+    2: "2등급",
+    3: "3등급",
+    4: "4등급",
+    5: "5등급",
+  },
+  En: {
+    1: "Grade 1",
+    2: "Grade 2",
+    3: "Grade 3",
+    4: "Grade 4",
+    5: "Grade 5",
+  },
+  Ja: {
+    1: "1等級",
+    2: "2等級",
+    3: "3等級",
+    4: "4等級",
+    5: "5等級",
+  },
+  Zh: {
+    1: "1等级",
+    2: "2等级",
+    3: "3等级",
+    4: "4等级",
+    5: "5等级",
+  },
 };
 
+const TEXT_BY_LANG = {
+  Ko: {
+    monsterCountSuffix: "마리",
+    noMonster: "표시할 몬스터가 없습니다.",
+    loadErrorSuffix: "파일을 불러오지 못했습니다.",
+  },
+  En: {
+    monsterCountSuffix: "",
+    noMonster: "No monsters to display.",
+    loadErrorSuffix: "could not be loaded.",
+  },
+  Ja: {
+    monsterCountSuffix: "体",
+    noMonster: "表示するモンスターがありません。",
+    loadErrorSuffix: "ファイルを読み込めませんでした。",
+  },
+  Zh: {
+    monsterCountSuffix: "只",
+    noMonster: "没有可显示的怪物。",
+    loadErrorSuffix: "文件加载失败。",
+  },
+};
+
+const ALLOWED_LANGS = ["Ko", "En", "Ja", "Zh"];
+
+let currentLang = "Ko";
 let eggs = [];
 let monsters = [];
 let itemNames = [];
@@ -28,13 +103,25 @@ const eggButtonsEl = document.getElementById("eggButtons");
 const tableBodyEl = document.getElementById("rateTableBody");
 const selectedEggNameEl = document.getElementById("selectedEggName");
 const monsterCountEl = document.getElementById("monsterCount");
-const totalWeightEl = document.getElementById("totalWeight");
 const searchInputEl = document.getElementById("searchInput");
+const langSelectEl = document.getElementById("langSelect");
+
+function normalizeLang(value) {
+  if (!value) return "Ko";
+  const normalized = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+  return ALLOWED_LANGS.includes(normalized) ? normalized : "Ko";
+}
+
+function getLangFromUrl() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return normalizeLang(urlParams.get("lang"));
+}
 
 async function loadText(fileName) {
   const response = await fetch(DATA_PATH + fileName);
   if (!response.ok) {
-    throw new Error(`${fileName} 파일을 불러오지 못했습니다.`);
+    const text = TEXT_BY_LANG[currentLang] || TEXT_BY_LANG.Ko;
+    throw new Error(`${fileName} ${text.loadErrorSuffix}`);
   }
   return await response.text();
 }
@@ -74,11 +161,11 @@ function parseNameLines(text) {
 }
 
 function getItemName(targetItem) {
-  return itemNames[targetItem ] || `아이템 ${targetItem}`;
+  return itemNames[targetItem - 1] || `Item ${targetItem}`;
 }
 
 function getMonsterName(index) {
-  return monsterNames[index - 1] || `몬스터 ${index}`;
+  return monsterNames[index - 1] || `Monster ${index}`;
 }
 
 function getUniqueTargetItems() {
@@ -149,31 +236,34 @@ function calculateRates(targetItem) {
       };
     })
     .sort((a, b) => {
-      if (a.rank !== b.rank) return a.rank - b.rank;
+      if (a.rank !== b.rank) return b.rank - a.rank; // 높은 등급 먼저 표시
       if (a.property !== b.property) return a.property - b.property;
       return a.index - b.index;
     });
 }
 
 function renderSummary(targetItem, rows) {
-  const totalWeight = rows.reduce((sum, row) => sum + row.weight, 0);
+  const text = TEXT_BY_LANG[currentLang] || TEXT_BY_LANG.Ko;
   selectedEggNameEl.textContent = getItemName(targetItem);
-  monsterCountEl.textContent = `${rows.length}마리`;
-  totalWeightEl.textContent = totalWeight.toFixed(4);
+  monsterCountEl.textContent = `${rows.length}${text.monsterCountSuffix}`;
 }
 
 function renderTable(rows) {
+  const text = TEXT_BY_LANG[currentLang] || TEXT_BY_LANG.Ko;
+  const rankNames = RANK_NAMES_BY_LANG[currentLang] || RANK_NAMES_BY_LANG.Ko;
+  const propertyNames = PROPERTY_NAMES_BY_LANG[currentLang] || PROPERTY_NAMES_BY_LANG.Ko;
+
   if (rows.length === 0) {
-    tableBodyEl.innerHTML = `<tr><td colspan="5" class="empty">표시할 몬스터가 없습니다.</td></tr>`;
+    tableBodyEl.innerHTML = `<tr><td colspan="5" class="empty">${escapeHtml(text.noMonster)}</td></tr>`;
     return;
   }
 
   tableBodyEl.innerHTML = rows.map(row => `
-    <tr>
+    <tr class="rank-${row.rank}">
       <td>${row.index}</td>
       <td>${escapeHtml(row.name)}</td>
-      <td>${RANK_NAMES[row.rank] || row.rank}</td>
-      <td>${PROPERTY_NAMES[row.property] || row.property}</td>
+      <td>${rankNames[row.rank] || row.rank}</td>
+      <td>${propertyNames[row.property] || row.property}</td>
       <td>${formatRate(row.rate)}</td>
     </tr>
   `).join("");
@@ -210,23 +300,33 @@ searchInputEl.addEventListener("input", () => {
 
   renderTable(filtered);
 });
+
+if (langSelectEl) {
+  langSelectEl.addEventListener("change", e => {
+    const nextLang = normalizeLang(e.target.value);
+    const url = new URL(window.location.href);
+    if (nextLang === "Ko") {
+      url.searchParams.delete("lang");
+    } else {
+      url.searchParams.set("lang", nextLang);
+    }
+    window.location.href = url.toString();
+  });
+}
+
 async function init() {
   try {
-    const urlParams = new URLSearchParams(window.location.search);
-    let lang = urlParams.get("lang") || "Ko";
+    currentLang = getLangFromUrl();
 
-    const allowedLangs = ["Ko", "En", "Ja", "Zh"];
-    lang = lang.charAt(0).toUpperCase() + lang.slice(1).toLowerCase();
-
-    if (!allowedLangs.includes(lang)) {
-      lang = "Ko";
+    if (langSelectEl) {
+      langSelectEl.value = currentLang;
     }
 
     const [eggText, monsterText, itemText, monsterNameText] = await Promise.all([
       loadText("Egg.txt"),
       loadText("Monster.txt"),
-      loadText(`strItem_${lang}.txt`),
-      loadText(`strMonsterName_${lang}.txt`),
+      loadText(`strItem_${currentLang}.txt`),
+      loadText(`strMonsterName_${currentLang}.txt`),
     ]);
 
     eggs = parseEggs(eggText);
