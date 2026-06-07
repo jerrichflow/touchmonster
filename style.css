@@ -1,0 +1,186 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, "Noto Sans KR", sans-serif;
+  background: #f7f1e6;
+  color: #3a2a1a;
+}
+
+.page {
+  width: min(100%, 960px);
+  margin: 0 auto;
+  padding: 20px 14px 48px;
+}
+
+.header {
+  text-align: center;
+  background: #fff8ec;
+  border: 2px solid #b98645;
+  border-radius: 18px;
+  padding: 24px 16px;
+  box-shadow: 0 4px 0 rgba(80, 50, 20, 0.16);
+}
+
+.header h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  color: #5a3518;
+}
+
+.header p {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+.updated {
+  color: #8a5b28;
+  font-size: 14px;
+}
+
+.notice,
+.controls,
+.summary,
+.table-section {
+  margin-top: 16px;
+  background: #fffdf8;
+  border: 1px solid #dcc49f;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.notice p {
+  margin: 8px 0 0;
+  line-height: 1.55;
+  font-size: 14px;
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  color: #5a3518;
+}
+
+.egg-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.egg-button {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: #8f5a2a;
+  color: #fff9ef;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.18);
+}
+
+.egg-button.active {
+  background: #3f8b43;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.summary-grid div {
+  background: #f5ead8;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.summary-grid span {
+  display: block;
+  font-size: 13px;
+  color: #76512b;
+}
+
+.summary-grid strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 20px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+#searchInput {
+  width: min(100%, 260px);
+  border: 1px solid #cba979;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #d8bd91;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  min-width: 560px;
+}
+
+th,
+td {
+  padding: 11px 10px;
+  border-bottom: 1px solid #eadbc4;
+  text-align: center;
+  font-size: 14px;
+}
+
+th {
+  background: #7a4d25;
+  color: #fff8ed;
+  position: sticky;
+  top: 0;
+}
+
+td:nth-child(2) {
+  text-align: left;
+  font-weight: 700;
+}
+
+.empty {
+  text-align: center !important;
+  color: #8b7359;
+  padding: 32px 12px;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 12px 10px 40px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .table-header {
+    display: block;
+  }
+
+  #searchInput {
+    width: 100%;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}

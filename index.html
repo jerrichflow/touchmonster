@@ -1,1 +1,71 @@
-test
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>터치몬스터 확률 정보</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <h1>터치몬스터 확률 정보</h1>
+      <p>게임 내 확률형 아이템의 몬스터 등장 확률을 안내합니다.</p>
+      <p class="updated">최종 업데이트: 2026.06.07</p>
+    </header>
+
+    <section class="notice">
+      <strong>안내</strong>
+      <p>확률은 내부 데이터의 가중치를 기준으로 자동 계산됩니다. 소수점 반올림으로 인해 합계가 100%와 다를 수 있습니다.</p>
+      <p>각 소환은 독립적으로 진행되며, 이전 결과가 다음 결과에 영향을 주지 않습니다.</p>
+    </section>
+
+    <section class="controls">
+      <h2>알 선택</h2>
+      <div id="eggButtons" class="egg-buttons"></div>
+    </section>
+
+    <section class="summary" id="summaryBox">
+      <h2 id="selectedEggName">알을 선택하세요</h2>
+      <div class="summary-grid">
+        <div>
+          <span>대상 몬스터 수</span>
+          <strong id="monsterCount">-</strong>
+        </div>
+        <div>
+          <span>총 가중치</span>
+          <strong id="totalWeight">-</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="table-section">
+      <div class="table-header">
+        <h2>등장 확률표</h2>
+        <input id="searchInput" type="search" placeholder="몬스터명 또는 Index 검색" />
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>몬스터명</th>
+              <th>등급</th>
+              <th>속성</th>
+              <th>확률</th>
+            </tr>
+          </thead>
+          <tbody id="rateTableBody">
+            <tr>
+              <td colspan="5" class="empty">알을 선택하면 확률표가 표시됩니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
