@@ -255,24 +255,30 @@ tr:last-child td {
 }
 
 
-/* Updated: name and grade share rank color; property uses icon only */
+/* Property icon version */
 td:nth-child(2) {
   text-align: left;
+  font-weight: 900;
+}
+
+.property-text,
+.property-1-text,
+.property-2-text,
+.property-3-text,
+.property-4-text,
+.property-5-text {
+  color: inherit;
 }
 
 .property-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  font-size: 22px;
+  width: 30px;
+  height: 30px;
+  font-size: 23px;
   line-height: 1;
   vertical-align: middle;
-}
-
-.rank-text {
-  font-weight: 900;
 }
 
 .index-cell {

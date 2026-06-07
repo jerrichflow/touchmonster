@@ -178,10 +178,14 @@ function renderTable(rows) {
   tableBodyEl.innerHTML = rows.map(row => `
     <tr>
       <td class="index-cell">${row.index}</td>
-      <td><span class="rank-text rank-${row.rank}-text">${escapeHtml(row.name)}</span></td>
-      <td><span class="rank-text rank-${row.rank}-text">${RANK_NAMES[row.rank] || row.rank}</span></td>
       <td>
-        <span class="property-icon" title="${PROPERTY_NAMES[row.property] || row.property}" aria-label="${PROPERTY_NAMES[row.property] || row.property}">
+        <span class="rank-text rank-${row.rank}-text">${escapeHtml(row.name)}</span>
+      </td>
+      <td>
+        <span class="rank-text rank-${row.rank}-text">${RANK_NAMES[row.rank] || row.rank}</span>
+      </td>
+      <td>
+        <span class="property-icon" title="${PROPERTY_NAMES[row.property] || row.property}">
           ${PROPERTY_ICONS[row.property] || "?"}
         </span>
       </td>
