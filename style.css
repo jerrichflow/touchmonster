@@ -253,3 +253,34 @@ tr:last-child td {
     flex: 1 1 calc(50% - 10px);
   }
 }
+
+
+/* Updated: name and grade share rank color; property uses icon only */
+td:nth-child(2) {
+  text-align: left;
+}
+
+.property-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 22px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.rank-text {
+  font-weight: 900;
+}
+
+.index-cell {
+  color: #111111;
+  font-weight: 900;
+}
+
+.rate-cell {
+  font-weight: 900;
+  color: #3b2a1b;
+}

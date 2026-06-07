@@ -9,6 +9,15 @@ const PROPERTY_NAMES = {
   5: "어둠",
 };
 
+const PROPERTY_ICONS = {
+  0: "🌈",
+  1: "🌿",
+  2: "🔥",
+  3: "💧",
+  4: "☀️",
+  5: "🌑",
+};
+
 const RANK_NAMES = {
   1: "1등급",
   2: "2등급",
@@ -169,9 +178,13 @@ function renderTable(rows) {
   tableBodyEl.innerHTML = rows.map(row => `
     <tr>
       <td class="index-cell">${row.index}</td>
-      <td>${escapeHtml(row.name)}</td>
+      <td><span class="rank-text rank-${row.rank}-text">${escapeHtml(row.name)}</span></td>
       <td><span class="rank-text rank-${row.rank}-text">${RANK_NAMES[row.rank] || row.rank}</span></td>
-      <td><span class="property-text property-${row.property}-text">${PROPERTY_NAMES[row.property] || row.property}</span></td>
+      <td>
+        <span class="property-icon" title="${PROPERTY_NAMES[row.property] || row.property}" aria-label="${PROPERTY_NAMES[row.property] || row.property}">
+          ${PROPERTY_ICONS[row.property] || "?"}
+        </span>
+      </td>
       <td class="rate-cell">${formatRate(row.rate)}</td>
     </tr>
   `).join("");
