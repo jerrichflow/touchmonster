@@ -74,7 +74,7 @@ function parseNameLines(text) {
 }
 
 function getItemName(targetItem) {
-  return itemNames[targetItem - 1] || `아이템 ${targetItem}`;
+  return itemNames[targetItem ] || `아이템 ${targetItem}`;
 }
 
 function getMonsterName(index) {
@@ -210,14 +210,23 @@ searchInputEl.addEventListener("input", () => {
 
   renderTable(filtered);
 });
-
 async function init() {
   try {
+    const urlParams = new URLSearchParams(window.location.search);
+    let lang = urlParams.get("lang") || "Ko";
+
+    const allowedLangs = ["Ko", "En", "Ja", "Zh"];
+    lang = lang.charAt(0).toUpperCase() + lang.slice(1).toLowerCase();
+
+    if (!allowedLangs.includes(lang)) {
+      lang = "Ko";
+    }
+
     const [eggText, monsterText, itemText, monsterNameText] = await Promise.all([
       loadText("Egg.txt"),
       loadText("Monster.txt"),
-      loadText("strItem_Ko.txt"),
-      loadText("strMonsterName_Ko.txt"),
+      loadText(`strItem_${lang}.txt`),
+      loadText(`strMonsterName_${lang}.txt`),
     ]);
 
     eggs = parseEggs(eggText);
