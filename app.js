@@ -9,15 +9,6 @@ const PROPERTY_NAMES = {
   5: "어둠",
 };
 
-const PROPERTY_ICONS = {
-  0: "🌈",
-  1: "🌿",
-  2: "🔥",
-  3: "💧",
-  4: "☀️",
-  5: "🌑",
-};
-
 const RANK_NAMES = {
   1: "1등급",
   2: "2등급",
@@ -169,6 +160,10 @@ function renderSummary(targetItem, rows) {
   monsterCountEl.textContent = `${rows.length}마리`;
 }
 
+function getPropertyIconPath(property) {
+  return `images/property_${property}.png`;
+}
+
 function renderTable(rows) {
   if (rows.length === 0) {
     tableBodyEl.innerHTML = `<tr><td colspan="5" class="empty">표시할 몬스터가 없습니다.</td></tr>`;
@@ -185,9 +180,12 @@ function renderTable(rows) {
         <span class="rank-text rank-${row.rank}-text">${RANK_NAMES[row.rank] || row.rank}</span>
       </td>
       <td>
-        <span class="property-icon" title="${PROPERTY_NAMES[row.property] || row.property}">
-          ${PROPERTY_ICONS[row.property] || "?"}
-        </span>
+        <img
+          class="property-icon"
+          src="${getPropertyIconPath(row.property)}"
+          alt="${PROPERTY_NAMES[row.property] || row.property}"
+          title="${PROPERTY_NAMES[row.property] || row.property}"
+        />
       </td>
       <td class="rate-cell">${formatRate(row.rate)}</td>
     </tr>
